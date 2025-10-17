@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gsuite-credentials
+  namespace: opendatahub
+  labels:
+    app: gsuite-mcp
+type: Opaque
+stringData:
+  GOOGLE_OAUTH_CLIENT_ID: "secret"
+  GOOGLE_OAUTH_CLIENT_SECRET: "secret"
+  GOOGLE_PSE_ENGINE_ID: "secret"
+  USER_GOOGLE_EMAIL: "test@example.com"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gsuite-mcp
+  namespace: opendatahub
+  labels:
+    app: gsuite-mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gsuite-mcp
+  template:
+    metadata:
+      labels:
+        app: gsuite-mcp
+    spec:
+      containers:
+        - name: gsuite-mcp
+          image: quay.io/anastas/workspace_mcp:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: OAUTHLIB_INSECURE_TRANSPORT
+              value: "1" # for dev/testing online
+            - name: TOOL_TIER
+              value: "complete" # [core | extended | complete]
+            - name: MCP_ENABLE_OAUTH21
+              value: "false"
+            - name: WORKSPACE_MCP_STATELESS_MODE
+              value: "false" # required Oauth 2.1
+            - name: GOOGLE_OAUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: gsuite-credentials
+                  key: GOOGLE_OAUTH_CLIENT_ID
+            - name: USER_GOOGLE_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: gsuite-credentials
+                  key: USER_GOOGLE_EMAIL
+            - name: GOOGLE_OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: gsuite-credentials
+                  key: GOOGLE_OAUTH_CLIENT_SECRET
+            - name: GOOGLE_PSE_ENGINE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: gsuite-credentials
+                  key: GOOGLE_PSE_ENGINE_ID
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gsuite-mcp
+  namespace: opendatahub
+  labels:
+    app: gsuite-mcp
+spec:
+  type: ClusterIP
+  selector:
+    app: gsuite-mcp
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http

@@ -1,0 +1,32 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: gen-ai-aa-mcp-servers
+  namespace: opendatahub
+immutable: false
+data:
+  GitHub-MCP-Server: |
+    {
+      "url": "https://api.githubcopilot.com/mcp/x/repos/readonly",
+      "description": "The GitHub MCP server enables exploration and interaction with repositories, code, and developer resources on GitHub. It provides programmatic access to repositories, issues, pull requests, and related project data, allowing automation and integration within development workflows. With this service, developers can query repositories, discover project metadata, and streamline code-related tasks through MCP-compatible tools."
+    }
+  Kubernetes-MCP-Server: |
+    {
+      "url": "http://kubernetes-mcp-server.opendatahub.svc.cluster.local/mcp",
+      "description": "A powerful and flexible Kubernetes Model Context Protocol (MCP) server implementation with support for Kubernetes and OpenShift."
+    }
+  Slack-MCP-Server: |
+    {
+      "url": "http://slack-mcp.opendatahub.svc.cluster.local/mcp",
+      "description": "A powerful and flexible Kubernetes Model Context Protocol (MCP) server implementation with support for Slack."
+    }
+  ServiceNow-MCP-Server: |
+    {
+      "url": "http://servicenow-mcp.opendatahub.svc.cluster.local/sse",
+      "description": "A powerful and flexible Kubernetes Model Context Protocol (MCP) server implementation with support for ServiceNow."
+    }
+  GSuite-MCP-Server: |
+    {
+      "url": "http://gsuite-mcp.opendatahub.svc.cluster.local/mcp",
+      "description": "A powerful and flexible Kubernetes Model Context Protocol (MCP) server implementation with support for Google Workplace."
+    }
