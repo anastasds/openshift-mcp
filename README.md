@@ -7,7 +7,7 @@ OpenShift configs for:
 * [google_workspace_mcp](https://github.com/taylorwilsdon/google_workspace_mcp)
 * [servicenow-mcp](https://github.com/echelon-ai-labs/servicenow-mcp)
 
-The latter three need credentials configured in Kubernetes secrets; placeholders are given.
+The latter three need credentials configured in Kubernetes secrets as per the configuration instructions for each of the linked projects; placeholders are given.
 
 ## Deployment
 
